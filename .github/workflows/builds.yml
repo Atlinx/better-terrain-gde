@@ -52,47 +52,6 @@ jobs:
             float-precision: single
             arch: wasm32
             os: ubuntu-20.04
-
-          - platform: linux
-            float-precision: double
-            arch: x86_64
-            os: ubuntu-20.04
-          - platform: windows
-            float-precision: double
-            arch: x86_32
-            os: windows-latest
-          - platform: windows
-            float-precision: double
-            arch: x86_64
-            os: windows-latest
-          - platform: macos
-            float-precision: double
-            arch: universal
-            os: macos-latest
-          - platform: android
-            float-precision: double
-            arch: arm64
-            os: ubuntu-20.04
-          - platform: android
-            float-precision: double
-            arch: arm32
-            os: ubuntu-20.04
-          - platform: android
-            float-precision: double
-            arch: x86_64
-            os: ubuntu-20.04
-          - platform: android
-            float-precision: double
-            arch: x86_32
-            os: ubuntu-20.04
-          - platform: ios
-            float-precision: double
-            arch: arm64
-            os: macos-latest
-          - platform: web
-            float-precision: double
-            arch: wasm32
-            os: ubuntu-20.04
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -110,13 +69,22 @@ jobs:
       #  run: |
       #    clang-format src/** --dry-run --Werror
 # Build
-      - name: 🔗 GDExtension Build
+      - name: 🔗 GDExtension Release Build
         uses: ./.github/actions/build
         with:
           platform: ${{ matrix.platform }}
           arch: ${{ matrix.arch }}
           float-precision: ${{ matrix.float-precision }}
           build-target-type: template_release
+
+      - name: 🔗 GDExtension Debug Build
+        uses: ./.github/actions/build
+        with:
+          platform: ${{ matrix.platform }}
+          arch: ${{ matrix.arch }}
+          float-precision: ${{ matrix.float-precision }}
+          build-target-type: template_debug
+
 # Sign
       - name: Mac Sign
         # Disable sign if secrets are not set
